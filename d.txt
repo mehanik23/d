@@ -1,3 +1,31 @@
+FRR (настройка HQ-RTR)
+apt update -y 
+apt install frr -y
+nano /etc/frr/daemons (ospfd=yes) save
+systemctl enable --now frr
+systemctl restart frr
+vtysh
+configure
+router ospf
+passive-interface default
+network 192.168.100.0/26 area 0
+network 192.168.100.64/28 area 0
+network 10.10.12.1/30 area 0
+area 0 authentication
+interface tun1(gre)
+no ip ospf network broadcast
+no ip ospf passive
+ip ospf authentication
+ip ospf authentication-key password
+exit
+exit
+write
+exit
+systemctl restart frr
+vtysh
+show running-config
+
+
 ###Mediawiki####
 apt install docker.io docker-compose -y
 cd /home/sshuser
